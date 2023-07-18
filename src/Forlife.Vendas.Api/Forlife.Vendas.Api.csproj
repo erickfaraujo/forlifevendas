@@ -16,6 +16,5 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Forlife.Vendas.Domain\Forlife.Vendas.Domain.csproj" />
-    <ProjectReference Include="..\Forlife.Vendas.Services\Forlife.Vendas.Services.csproj" />
   </ItemGroup>
 </Project>

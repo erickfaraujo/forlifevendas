@@ -1,7 +1,7 @@
 using Amazon;
 using Amazon.DynamoDBv2;
+using Forlife.Vendas.Domain.Handlers;
 using Forlife.Vendas.Domain.Repositories;
-using Forlife.Vendas.Services.Handlers;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);

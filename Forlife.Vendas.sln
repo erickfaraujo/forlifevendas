@@ -5,11 +5,9 @@ VisualStudioVersion = 17.2.32526.322
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Forlife.Vendas.Api", "src\Forlife.Vendas.Api\Forlife.Vendas.Api.csproj", "{6EB55A3F-775D-4C28-9526-4081E1AEF70A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Forlife.Vendas.Domain", "src\Forlife.Vendas.Domain\Forlife.Vendas.Domain.csproj", "{53E38034-CEDF-4B09-AE0C-A7A921D6CFA3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Forlife.Vendas.Domain", "src\Forlife.Vendas.Domain\Forlife.Vendas.Domain.csproj", "{53E38034-CEDF-4B09-AE0C-A7A921D6CFA3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Forlife.Vendas.Services", "src\Forlife.Vendas.Services\Forlife.Vendas.Services.csproj", "{FE959450-6972-4164-9AF4-64AE075CA65A}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Forlife.Vendas.Data", "src\Forlife.Vendas.Data\Forlife.Vendas.Data.csproj", "{618CF9C0-18D8-4281-AC3E-C8A55275CD0A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Forlife.Vendas.Data", "src\Forlife.Vendas.Data\Forlife.Vendas.Data.csproj", "{618CF9C0-18D8-4281-AC3E-C8A55275CD0A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1. Presentation", "1. Presentation", "{7A5F567E-C963-4DEB-8533-5D56F61AFB7D}"
 EndProject
@@ -31,10 +29,6 @@ Global
 		{53E38034-CEDF-4B09-AE0C-A7A921D6CFA3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{53E38034-CEDF-4B09-AE0C-A7A921D6CFA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{53E38034-CEDF-4B09-AE0C-A7A921D6CFA3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FE959450-6972-4164-9AF4-64AE075CA65A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FE959450-6972-4164-9AF4-64AE075CA65A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FE959450-6972-4164-9AF4-64AE075CA65A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FE959450-6972-4164-9AF4-64AE075CA65A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{618CF9C0-18D8-4281-AC3E-C8A55275CD0A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{618CF9C0-18D8-4281-AC3E-C8A55275CD0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{618CF9C0-18D8-4281-AC3E-C8A55275CD0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -46,7 +40,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{6EB55A3F-775D-4C28-9526-4081E1AEF70A} = {7A5F567E-C963-4DEB-8533-5D56F61AFB7D}
 		{53E38034-CEDF-4B09-AE0C-A7A921D6CFA3} = {B057D800-97D0-442E-866C-A08B82B7F5CC}
-		{FE959450-6972-4164-9AF4-64AE075CA65A} = {B057D800-97D0-442E-866C-A08B82B7F5CC}
 		{618CF9C0-18D8-4281-AC3E-C8A55275CD0A} = {C5C9F6FE-9526-4952-AB6F-C3AFC3C052D5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
