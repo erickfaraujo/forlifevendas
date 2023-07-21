@@ -1,5 +1,6 @@
 using Amazon;
 using Amazon.DynamoDBv2;
+using Forlife.Vendas.Data.Repositories;
 using Forlife.Vendas.Domain.Handlers;
 using Forlife.Vendas.Domain.Repositories;
 using Microsoft.OpenApi.Models;
@@ -19,6 +20,7 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 builder.Services.AddMediatR(x => x.RegisterServicesFromAssemblyContaining(typeof(CadastrarClienteRequestHandler)));
+builder.Services.AddMediatR(x => x.RegisterServicesFromAssemblyContaining(typeof(ConsultarClienteRequestHandler)));
 builder.Services.AddSingleton<IAmazonDynamoDB>(_ => new AmazonDynamoDBClient(RegionEndpoint.USEast1));
 builder.Services.AddSingleton<IClienteRepository>(provider => new ClienteRepository(provider.GetRequiredService<IAmazonDynamoDB>()));
 
