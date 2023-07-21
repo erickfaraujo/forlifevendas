@@ -15,6 +15,7 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Forlife.Vendas.Data\Forlife.Vendas.Data.csproj" />
     <ProjectReference Include="..\Forlife.Vendas.Domain\Forlife.Vendas.Domain.csproj" />
   </ItemGroup>
 </Project>

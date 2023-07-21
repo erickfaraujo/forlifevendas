@@ -45,6 +45,6 @@ public class ClienteRepository : IClienteRepository
 
         var document = Document.FromAttributeMap(response.Item);
 
-        return JsonSerializer.Deserialize<Cliente>(document);
+        return JsonSerializer.Deserialize<Cliente>(document.ToJson());
     }
 }

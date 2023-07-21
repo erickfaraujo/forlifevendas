@@ -46,6 +46,22 @@ public class ClienteRepository : IClienteRepository
 
         var document = Document.FromAttributeMap(response.Item);
 
-        return JsonSerializer.Deserialize<Cliente>(document);
+        return JsonSerializer.Deserialize<Cliente>(document.ToJson());
+    }
+
+    public async Task<bool> DeleteAsync(Guid id)
+    {
+        var deleteItemRequest = new DeleteItemRequest
+        {
+            TableName = _tableName,
+            Key = new Dictionary<string, AttributeValue>
+            {
+                { "pk", new AttributeValue { S = id.ToString() } },
+                { "sk", new AttributeValue { S = id.ToString() } }
+            }
+        };
+
+        var response = await _dynamoDB.DeleteItemAsync(deleteItemRequest);
+        return response.HttpStatusCode == HttpStatusCode.OK;
     }
 }
