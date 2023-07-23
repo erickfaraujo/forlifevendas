@@ -1,7 +1,7 @@
 using Amazon;
 using Amazon.DynamoDBv2;
 using Forlife.Vendas.Data.Repositories;
-using Forlife.Vendas.Domain.Handlers;
+using Forlife.Vendas.Domain.Handlers.Clientes;
 using Forlife.Vendas.Domain.Repositories;
 using Microsoft.OpenApi.Models;
 

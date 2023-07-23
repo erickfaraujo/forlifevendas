@@ -1,12 +1,15 @@
-﻿using Forlife.Vendas.Domain.Models;
+﻿using Forlife.Vendas.Domain.Exceptions;
+using Forlife.Vendas.Domain.Models;
 using Forlife.Vendas.Domain.Repositories;
-using Forlife.Vendas.Domain.Requests;
+using Forlife.Vendas.Domain.Requests.Clientes;
+using Forlife.Vendas.Domain.Responses.Clientes;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using OperationResult;
 
-namespace Forlife.Vendas.Domain.Handlers;
+namespace Forlife.Vendas.Domain.Handlers.Clientes;
 
-public class CadastrarClienteRequestHandler : IRequestHandler<CadastrarClienteRequest, CadastrarClienteResponse>
+public class CadastrarClienteRequestHandler : IRequestHandler<CadastrarClienteRequest, Result<CadastrarClienteResponse>>
 {
     private readonly IClienteRepository _clienteRepository;
     private readonly ILogger<CadastrarClienteRequestHandler> _logger;
@@ -16,7 +19,7 @@ public class CadastrarClienteRequestHandler : IRequestHandler<CadastrarClienteRe
         _clienteRepository = clienteRepository;
         _logger = logger;
     }
-    public async Task<CadastrarClienteResponse> Handle(CadastrarClienteRequest request, CancellationToken cancellationToken)
+    public async Task<Result<CadastrarClienteResponse>> Handle(CadastrarClienteRequest request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Iniciando cadastro de cliente");
 
@@ -28,10 +31,10 @@ public class CadastrarClienteRequestHandler : IRequestHandler<CadastrarClienteRe
             DataNascimento = request.DataNascimento
         };
 
-        await _clienteRepository.CreateAsync(cliente);
+        var resultInsert = await _clienteRepository.CreateAsync(cliente);
 
-        var response = new CadastrarClienteResponse(cliente.Id);
-
-        return response;
+        return resultInsert
+            ? new CadastrarClienteResponse(cliente.Id)
+            : new CadastrarClienteException();
     }
 }
