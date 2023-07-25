@@ -23,4 +23,11 @@ public class ClientesController : ControllerBase
         var request = new ConsultarClienteRequest(id);
         return await _mediator.SendCommand(request);
     }
+
+    [HttpDelete("/{id}")]
+    public async Task<IResult> DeletarCliente(string id)
+    {
+        var request = new DeletarClienteRequest(id);
+        return await _mediator.SendCommand(request);
+    }
 }
