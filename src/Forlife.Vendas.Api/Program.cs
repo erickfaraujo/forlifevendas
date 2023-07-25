@@ -2,6 +2,7 @@ using Amazon;
 using Amazon.DynamoDBv2;
 using Forlife.Vendas.Data.Repositories;
 using Forlife.Vendas.Domain.Handlers.Clientes;
+using Forlife.Vendas.Domain.Handlers.LocaisVenda;
 using Forlife.Vendas.Domain.Repositories;
 using Microsoft.OpenApi.Models;
 
@@ -21,8 +22,12 @@ builder.Services.AddSwaggerGen(c =>
 
 builder.Services.AddMediatR(x => x.RegisterServicesFromAssemblyContaining(typeof(CadastrarClienteRequestHandler)));
 builder.Services.AddMediatR(x => x.RegisterServicesFromAssemblyContaining(typeof(ConsultarClienteRequestHandler)));
+builder.Services.AddMediatR(x => x.RegisterServicesFromAssemblyContaining(typeof(CadastrarLocalRequestHandler)));
+builder.Services.AddMediatR(x => x.RegisterServicesFromAssemblyContaining(typeof(ConsultarLocalRequestHandler)));
+builder.Services.AddMediatR(x => x.RegisterServicesFromAssemblyContaining(typeof(GetLocaisRequestHandler)));
 builder.Services.AddSingleton<IAmazonDynamoDB>(_ => new AmazonDynamoDBClient(RegionEndpoint.USEast1));
 builder.Services.AddSingleton<IClienteRepository>(provider => new ClienteRepository(provider.GetRequiredService<IAmazonDynamoDB>()));
+builder.Services.AddSingleton<ILocalVendaRepository>(provider => new LocalVendaRepository(provider.GetRequiredService<IAmazonDynamoDB>()));
 
 var app = builder.Build();
 
@@ -32,7 +37,5 @@ app.MapControllers();
 
 app.UseSwagger();
 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ForlifeVendas v1"));
-
-app.MapGet("/", () => "API ForlifeVendas. Para acessar o swagger, adicione /swagger no final da URL");
 
 app.Run();

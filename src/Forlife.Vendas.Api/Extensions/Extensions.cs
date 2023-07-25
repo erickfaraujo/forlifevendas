@@ -20,6 +20,8 @@ public static class Extensions
         {
             CadastrarClienteException e => new StatusCodeResult<ErroResponse>((int)HttpStatusCode.InternalServerError, new(e.Mensagem)),
             ClienteNaoLocalizadoException e => new StatusCodeResult<ErroResponse>((int)HttpStatusCode.NotFound, new(e.Mensagem)),
+            CadastrarLocalException e => new StatusCodeResult<ErroResponse>((int)HttpStatusCode.InternalServerError, new(e.Mensagem)),
+            LocalNaoLocalizadoException e => new StatusCodeResult<ErroResponse>((int)HttpStatusCode.BadRequest, new(e.Mensagem)),
             _ => new StatusCodeResult<ErroResponse>(500, new("Erro Genérico"))
         };
 

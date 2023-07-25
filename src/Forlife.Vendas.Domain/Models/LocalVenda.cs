@@ -2,7 +2,7 @@
 
 namespace Forlife.Vendas.Domain.Models;
 
-public class Cliente
+public class LocalVenda
 {
     [JsonPropertyName("pk")]
     public Guid Pk => Id;
@@ -12,11 +12,9 @@ public class Cliente
 
     public Guid Id { get; init; } = default!;
 
-    public string Nome { get; init; } = default!;
+    public string Descricao { get; init; } = default!;
 
-    public string Contato { get; init; } = default!;
+    public string Endereco { get; init; } = default!;
 
-    public DateTime DataNascimento { get; init; }
-
-    public LocalVenda LocalVenda { get; set; } = default!;
+    public string? Referencia { get; init; }
 }
