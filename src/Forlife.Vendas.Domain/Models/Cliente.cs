@@ -18,5 +18,5 @@ public class Cliente
 
     public DateTime DataNascimento { get; init; }
 
-    public LocalVenda LocalVenda { get; set; } = default!;
+    public Guid LocalVenda { get; set; } = default!;
 }

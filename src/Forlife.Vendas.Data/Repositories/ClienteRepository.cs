@@ -49,6 +49,37 @@ public class ClienteRepository : IClienteRepository
         return JsonSerializer.Deserialize<Cliente>(document.ToJson());
     }
 
+    public async Task<IEnumerable<Cliente>?> GetByIdLocalAsync(Guid Id)
+    {
+        var tabelaClientes = Table.LoadTable(_dynamoDB, _tableName);
+        var filter = new QueryFilter("IdLocal", QueryOperator.Equal, Id);
+
+        var config = new QueryOperationConfig()
+        {
+            //Limit = 10, // 10 items per page.
+            Select = SelectValues.SpecificAttributes,
+            ConsistentRead = true,
+            Filter = filter
+        };
+
+        var listaClientesEncontrados = new List<Cliente>();
+
+        Search search = tabelaClientes.Query(config);
+        do
+        {
+            
+            var listaClientes = await search.GetNextSetAsync();
+            
+
+            foreach (var cliente in listaClientes)
+                listaClientesEncontrados.Add(JsonSerializer.Deserialize<Cliente>(cliente.ToJson())!);
+
+        }
+        while (!search.IsDone);
+
+        return listaClientesEncontrados;
+    }
+
     public async Task<bool> DeleteAsync(Guid id)
     {
         var deleteItemRequest = new DeleteItemRequest
@@ -64,4 +95,5 @@ public class ClienteRepository : IClienteRepository
         var response = await _dynamoDB.DeleteItemAsync(deleteItemRequest);
         return response.HttpStatusCode == HttpStatusCode.OK;
     }
+
 }

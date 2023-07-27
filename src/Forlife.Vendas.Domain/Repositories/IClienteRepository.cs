@@ -9,5 +9,7 @@ public interface IClienteRepository
 
     Task<Cliente?> GetAsync(Guid Id);
 
+    Task<IEnumerable<Cliente>?> GetByIdLocalAsync(Guid Id);
+
     Task<bool> DeleteAsync(Guid id);
 }

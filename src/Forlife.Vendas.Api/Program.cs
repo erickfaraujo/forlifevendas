@@ -25,6 +25,7 @@ builder.Services.AddMediatR(x => x.RegisterServicesFromAssemblyContaining(typeof
 builder.Services.AddMediatR(x => x.RegisterServicesFromAssemblyContaining(typeof(CadastrarLocalRequestHandler)));
 builder.Services.AddMediatR(x => x.RegisterServicesFromAssemblyContaining(typeof(ConsultarLocalRequestHandler)));
 builder.Services.AddMediatR(x => x.RegisterServicesFromAssemblyContaining(typeof(GetLocaisRequestHandler)));
+builder.Services.AddMediatR(x => x.RegisterServicesFromAssemblyContaining(typeof(ConsultarClientesPorLocalRequestHandler)));
 builder.Services.AddMediatR(x => x.RegisterServicesFromAssemblyContaining(typeof(DeletarClienteRequestHandler)));
 builder.Services.AddSingleton<IAmazonDynamoDB>(_ => new AmazonDynamoDBClient(RegionEndpoint.USEast1));
 builder.Services.AddSingleton<IClienteRepository>(provider => new ClienteRepository(provider.GetRequiredService<IAmazonDynamoDB>()));

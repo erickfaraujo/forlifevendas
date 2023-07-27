@@ -19,15 +19,14 @@ public class ClientesController : ControllerBase
 
     [HttpGet("/{id}")]
     public async Task<IResult> ConsultarCliente(string id)
-    {
-        var request = new ConsultarClienteRequest(id);
-        return await _mediator.SendCommand(request);
-    }
+        => await _mediator.SendCommand(new ConsultarClienteRequest(id));
 
     [HttpDelete("/{id}")]
     public async Task<IResult> DeletarCliente(string id)
-    {
-        var request = new DeletarClienteRequest(id);
-        return await _mediator.SendCommand(request);
-    }
+        => await _mediator.SendCommand(new DeletarClienteRequest(id));
+        
+
+    [HttpGet("clientesPorLoja/{idLocal}")]
+    public async Task<IResult> ConsultarClientesPorLocal(string idLocal)
+        => await _mediator.SendCommand(new ConsultarClientesPorLocalRequest(idLocal));
 }

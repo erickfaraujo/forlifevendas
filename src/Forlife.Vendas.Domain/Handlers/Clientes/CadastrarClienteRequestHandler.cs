@@ -35,7 +35,7 @@ public class CadastrarClienteRequestHandler : IRequestHandler<CadastrarClienteRe
             Nome = request.Nome,
             Contato = request.Contato,
             DataNascimento = request.DataNascimento,
-            LocalVenda = localVenda
+            LocalVenda = localVenda.Id
         };
 
         var resultInsert = await _clienteRepository.CreateAsync(cliente);
