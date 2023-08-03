@@ -22,7 +22,8 @@ public static class Extensions
             ClienteNaoLocalizadoException e => new StatusCodeResult<ErroResponse>((int)HttpStatusCode.NotFound, new(e.Mensagem)),
             CadastrarLocalException e => new StatusCodeResult<ErroResponse>((int)HttpStatusCode.InternalServerError, new(e.Mensagem)),
             LocalNaoLocalizadoException e => new StatusCodeResult<ErroResponse>((int)HttpStatusCode.BadRequest, new(e.Mensagem)),
-            _ => new StatusCodeResult<ErroResponse>(500, new("Erro Genérico"))
+            PedidoNaoLocalizadoException e => new StatusCodeResult<ErroResponse>((int)HttpStatusCode.BadRequest, new(e.Mensagem)),
+            _ => new StatusCodeResult<ErroResponse>(500, new($"Erro Genérico: {error.Message}"))
         };
 
     private readonly record struct StatusCodeResult<T>(int StatusCode, T? Value) : Microsoft.AspNetCore.Http.IResult

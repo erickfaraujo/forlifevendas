@@ -11,13 +11,13 @@ namespace Forlife.Vendas.Domain.Handlers.Clientes;
 
 public class CadastrarClienteRequestHandler : IRequestHandler<CadastrarClienteRequest, Result<CadastrarClienteResponse>>
 {
-    private readonly IClienteRepository _clienteRepository;
+    private readonly IForlifeVendasRepository _forlifeVendasRepository;
     private readonly ILocalVendaRepository _localVendaRepository;
     private readonly ILogger<CadastrarClienteRequestHandler> _logger;
 
-    public CadastrarClienteRequestHandler(IClienteRepository clienteRepository, ILocalVendaRepository localVendaRepository, ILogger<CadastrarClienteRequestHandler> logger)
+    public CadastrarClienteRequestHandler(IForlifeVendasRepository forlifeVendasRepository, ILocalVendaRepository localVendaRepository, ILogger<CadastrarClienteRequestHandler> logger)
     {
-        _clienteRepository = clienteRepository;
+        _forlifeVendasRepository = forlifeVendasRepository;
         _localVendaRepository = localVendaRepository;
         _logger = logger;
     }
@@ -26,22 +26,27 @@ public class CadastrarClienteRequestHandler : IRequestHandler<CadastrarClienteRe
         _logger.LogInformation("Iniciando cadastro de cliente");
 
         var localVenda = await _localVendaRepository.GetAsync(request.IdLocalVenda);
-        if (localVenda is null)
+        if (localVenda is null || string.IsNullOrEmpty(localVenda.Descricao))
             return new LocalNaoLocalizadoException();
 
         var cliente = new Cliente()
         {
-            Id = Guid.NewGuid(),
             Nome = request.Nome,
-            Contato = request.Contato,
-            DataNascimento = request.DataNascimento,
-            LocalVenda = localVenda.Id
+            Telefone = request.Telefone,
+            Email = request.Email,
+            DtNascimento = request.DataNascimento.ToString("yyyy-MM-dd"),
+            IdLocal = localVenda.IdLocal.ToString()
         };
 
-        var resultInsert = await _clienteRepository.CreateAsync(cliente);
+        var cliExistente = await _forlifeVendasRepository.GetAsync<Cliente>(cliente.Pk, cliente.Sk);
+
+        if (cliExistente is not null)
+            return new Exception("Cliente já existe");
+
+        var resultInsert = await _forlifeVendasRepository.CreateAsync(cliente);
 
         return resultInsert
-            ? new CadastrarClienteResponse(cliente.Id)
+            ? new CadastrarClienteResponse(cliente.Pk)
             : new CadastrarClienteException();
     }
 }

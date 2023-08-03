@@ -5,18 +5,23 @@ namespace Forlife.Vendas.Domain.Models;
 public class Cliente
 {
     [JsonPropertyName("pk")]
-    public Guid Pk => Id;
+    public string Pk => string.Concat(Nome.Replace(" ", "").ToLower(), '-', Telefone);
 
     [JsonPropertyName("sk")]
-    public Guid Sk => Id;
+    public string Sk => "PERFIL";
 
-    public Guid Id { get; init; } = default!;
-
+    [JsonPropertyName("nome")]
     public string Nome { get; init; } = default!;
 
-    public string Contato { get; init; } = default!;
+    [JsonPropertyName("telefone")]
+    public string Telefone { get; set; } = default!;
 
-    public DateTime DataNascimento { get; init; }
+    [JsonPropertyName("email")]
+    public string Email { get; set; } = default!;
 
-    public Guid LocalVenda { get; set; } = default!;
+    [JsonPropertyName("dtnascimento")]
+    public string DtNascimento { get; init; } = default!;
+
+    [JsonPropertyName("idlocal")]
+    public string IdLocal { get; set; } = default!;
 }

@@ -11,5 +11,4 @@ public interface ILocalVendaRepository
 
     Task<IEnumerable<LocalVenda>?> GetAllAsync();
 
-    Task<bool> DeleteAsync(Guid id);
 }

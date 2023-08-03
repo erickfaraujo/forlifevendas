@@ -19,10 +19,7 @@ public class LocalVendaController : ControllerBase
 
     [HttpGet("{id}")]
     public async Task<IResult> ConsultarLocal(string id)
-    {
-        var request = new ConsultarLocalRequest(id);
-        return await _mediator.SendCommand(request);
-    }
+        => await _mediator.SendCommand(new ConsultarLocalRequest(id));
 
     [HttpGet()]
     public async Task<IResult> Locais()

@@ -25,7 +25,7 @@ public class CadastrarLocalRequestHandler : IRequestHandler<CadastrarLocalReques
 
         var localVenda = new LocalVenda()
         {
-            Id = Guid.NewGuid(),
+            IdLocal = Guid.NewGuid(),
             Descricao = request.Descricao,
             Endereco = request.Endereco,
             Referencia = request.Referencia
@@ -34,7 +34,7 @@ public class CadastrarLocalRequestHandler : IRequestHandler<CadastrarLocalReques
         var resultInsert = await _localVendaRepository.CreateAsync(localVenda);
 
         return resultInsert
-            ? new CadastrarLocalResponse(localVenda.Id)
+            ? new CadastrarLocalResponse(localVenda.IdLocal)
             : new CadastrarLocalException();
     }
 }

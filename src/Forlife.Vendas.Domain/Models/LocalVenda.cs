@@ -4,17 +4,15 @@ namespace Forlife.Vendas.Domain.Models;
 
 public class LocalVenda
 {
-    [JsonPropertyName("pk")]
-    public Guid Pk => Id;
+    [JsonPropertyName("idlocal")]
+    public Guid IdLocal { get; init; } = default!;
 
-    [JsonPropertyName("sk")]
-    public Guid Sk => Id;
-
-    public Guid Id { get; init; } = default!;
-
+    [JsonPropertyName("descricao")]
     public string Descricao { get; init; } = default!;
 
+    [JsonPropertyName("endereco")]
     public string Endereco { get; init; } = default!;
 
-    public string? Referencia { get; init; }
+    [JsonPropertyName("referencia")]
+    public string Referencia { get; init; } = default!;
 }

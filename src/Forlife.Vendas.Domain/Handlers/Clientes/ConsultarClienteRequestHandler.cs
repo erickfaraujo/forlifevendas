@@ -1,4 +1,5 @@
 ﻿using Forlife.Vendas.Domain.Exceptions;
+using Forlife.Vendas.Domain.Models;
 using Forlife.Vendas.Domain.Repositories;
 using Forlife.Vendas.Domain.Requests.Clientes;
 using Forlife.Vendas.Domain.Responses.Clientes;
@@ -9,14 +10,14 @@ namespace Forlife.Vendas.Domain.Handlers.Clientes;
 
 public class ConsultarClienteRequestHandler : IRequestHandler<ConsultarClienteRequest, Result<ConsultarClienteResponse>>
 {
-    private readonly IClienteRepository _clienteRepository;
+    private readonly IForlifeVendasRepository _forlifeVendasRepository;
 
-    public ConsultarClienteRequestHandler(IClienteRepository clienteRepository)
-        => _clienteRepository = clienteRepository;
+    public ConsultarClienteRequestHandler(IForlifeVendasRepository forlifeVendasRepository)
+        => _forlifeVendasRepository = forlifeVendasRepository;
 
     public async Task<Result<ConsultarClienteResponse>> Handle(ConsultarClienteRequest request, CancellationToken cancellationToken)
     {
-        var cliente = await _clienteRepository.GetAsync(Guid.Parse(request.Id));
+        var cliente = await _forlifeVendasRepository.GetAsync<Cliente>(request.Id, "PERFIL");
 
         return cliente is null
             ? new ClienteNaoLocalizadoException()

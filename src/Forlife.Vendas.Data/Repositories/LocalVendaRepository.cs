@@ -34,8 +34,7 @@ public class LocalVendaRepository : ILocalVendaRepository
             TableName = _tableName,
             Key = new Dictionary<string, AttributeValue>()
             {
-                { "pk", new AttributeValue() { S = id.ToString() } },
-                { "sk", new AttributeValue() { S = id.ToString() } }
+                { "idlocal", new AttributeValue() { S = id.ToString() } }
             },
             ConsistentRead = true
         };
@@ -66,21 +65,5 @@ public class LocalVendaRepository : ILocalVendaRepository
         }
 
         return locais;
-    }
-
-    public async Task<bool> DeleteAsync(Guid id)
-    {
-        var deleteItemRequest = new DeleteItemRequest
-        {
-            TableName = _tableName,
-            Key = new Dictionary<string, AttributeValue>
-            {
-                { "pk", new AttributeValue { S = id.ToString() } },
-                { "sk", new AttributeValue { S = id.ToString() } }
-            }
-        };
-
-        var response = await _dynamoDB.DeleteItemAsync(deleteItemRequest);
-        return response.HttpStatusCode == HttpStatusCode.OK;
     }
 }

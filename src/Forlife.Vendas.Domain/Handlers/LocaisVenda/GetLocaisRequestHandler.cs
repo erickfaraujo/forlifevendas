@@ -20,7 +20,7 @@ public class GetLocaisRequestHandler : IRequestHandler<GetLocaisRequest, Result<
     {
         var locais = await _localVendaRepository.GetAllAsync();
 
-        return locais is null
+        return locais is null || !locais.Any()
             ? new LocalNaoLocalizadoException()
             : new GetLocaisResponse(locais);
     }

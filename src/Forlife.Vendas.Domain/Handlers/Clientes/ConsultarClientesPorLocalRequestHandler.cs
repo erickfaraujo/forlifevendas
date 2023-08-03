@@ -9,16 +9,16 @@ namespace Forlife.Vendas.Domain.Handlers.Clientes;
 
 public class ConsultarClientesPorLocalRequestHandler : IRequestHandler<ConsultarClientesPorLocalRequest, Result<ConsultarClientesPorLocalResponse>>
 {
-    private readonly IClienteRepository _clienteRepository;
+    private readonly IForlifeVendasRepository _forlifeVendasRepository;
 
-    public ConsultarClientesPorLocalRequestHandler(IClienteRepository clienteRepository)
-        => _clienteRepository = clienteRepository;
+    public ConsultarClientesPorLocalRequestHandler(IForlifeVendasRepository forlifeVendasRepository)
+        => _forlifeVendasRepository = forlifeVendasRepository;
 
     public async Task<Result<ConsultarClientesPorLocalResponse>> Handle(ConsultarClientesPorLocalRequest request, CancellationToken cancellationToken)
     {
-        var clientes = await _clienteRepository.GetByIdLocalAsync(Guid.Parse(request.IdLocal));
+        var clientes = await _forlifeVendasRepository.GetClienteByIdLocalAsync(Guid.Parse(request.IdLocal));
 
-        return clientes is null
+        return clientes is null || !clientes.Any()
             ? new ClienteNaoLocalizadoException()
             : new ConsultarClientesPorLocalResponse(clientes);
     }
