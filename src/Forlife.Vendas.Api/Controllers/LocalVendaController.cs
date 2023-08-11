@@ -14,14 +14,14 @@ public class LocalVendaController : ControllerBase
     public LocalVendaController(IMediator mediator) => _mediator = mediator;
 
     [HttpPost]
-    public async Task<IResult> CadastrarLocal(CadastrarLocalRequest request)
+    public async Task<IActionResult> CadastrarLocal(CadastrarLocalRequest request)
         => await _mediator.SendCommand(request);
 
     [HttpGet("{id}")]
-    public async Task<IResult> ConsultarLocal(string id)
+    public async Task<IActionResult> ConsultarLocal(string id)
         => await _mediator.SendCommand(new ConsultarLocalRequest(id));
 
     [HttpGet()]
-    public async Task<IResult> Locais()
+    public async Task<IActionResult> Locais()
         => await _mediator.SendCommand(new GetLocaisRequest());
 }

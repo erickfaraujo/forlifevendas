@@ -14,15 +14,15 @@ public class PedidosController : ControllerBase
     public PedidosController(IMediator mediator) => _mediator = mediator;
 
     [HttpPost]
-    public async Task<IResult> CriarPedido(CriarPedidoRequest request)
+    public async Task<IActionResult> CriarPedido(CriarPedidoRequest request)
         => await _mediator.SendCommand(request);
 
     [HttpGet("cliente/{idCliente}")]
-    public async Task<IResult> ConsultarPedidoCliente(string idCliente, bool pagos)
+    public async Task<IActionResult> ConsultarPedidoCliente(string idCliente, bool pagos)
         => await _mediator.SendCommand(new ConsultarPedidosClienteRequest(idCliente, pagos));
 
     [HttpGet("data")]
-    public async Task<IResult> ConsultarPedidoCliente(string dataInicio, string dataFim)
+    public async Task<IActionResult> ConsultarPedidoCliente(string dataInicio, string dataFim)
         => await _mediator.SendCommand(new ConsultarPedidosPorDataRequest(dataInicio, dataFim));
 
 }

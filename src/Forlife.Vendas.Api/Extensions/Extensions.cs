@@ -1,39 +1,27 @@
 ﻿using Forlife.Vendas.Domain.Exceptions;
-using Forlife.Vendas.Domain.Responses;
 using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using OperationResult;
-using System.Net;
 
 namespace Forlife.Vendas.Api.Extensions;
 
 public static class Extensions
 {
-    public static async Task<Microsoft.AspNetCore.Http.IResult> SendCommand<T>(this IMediator mediator, IRequest<Result<T>> request, Func<T, Microsoft.AspNetCore.Http.IResult>? result = null)
+    public static async Task<IActionResult> SendCommand<T>(this IMediator mediator, IRequest<Result<T>> request)
         => await mediator.Send(request) switch
         {
-            (true, var response, _) => result != null ? result(response!) : Results.Ok(response),
+            (true, var response, _) => new OkObjectResult(response),
             var (_, _, error) => HandleError(error!)
         };
 
-    private static Microsoft.AspNetCore.Http.IResult HandleError(Exception error)
+    private static IActionResult HandleError(Exception error)
         => error switch
         {
-            CadastrarClienteException e => new StatusCodeResult<ErroResponse>((int)HttpStatusCode.InternalServerError, new(e.Mensagem)),
-            ClienteNaoLocalizadoException e => new StatusCodeResult<ErroResponse>((int)HttpStatusCode.NotFound, new(e.Mensagem)),
-            CadastrarLocalException e => new StatusCodeResult<ErroResponse>((int)HttpStatusCode.InternalServerError, new(e.Mensagem)),
-            LocalNaoLocalizadoException e => new StatusCodeResult<ErroResponse>((int)HttpStatusCode.BadRequest, new(e.Mensagem)),
-            PedidoNaoLocalizadoException e => new StatusCodeResult<ErroResponse>((int)HttpStatusCode.BadRequest, new(e.Mensagem)),
-            _ => new StatusCodeResult<ErroResponse>(500, new($"Erro Genérico: {error.Message}"))
+            CadastrarClienteException e => new ObjectResult(e.Mensagem) { StatusCode = 500 },
+            ClienteNaoLocalizadoException e => new BadRequestObjectResult(e.Mensagem),
+            CadastrarLocalException e => new ObjectResult(e.Mensagem) { StatusCode = 500 },
+            LocalNaoLocalizadoException e => new BadRequestObjectResult(e.Mensagem),
+            PedidoNaoLocalizadoException e => new BadRequestObjectResult(e.Mensagem),
+            _ => new ObjectResult(500)
         };
-
-    private readonly record struct StatusCodeResult<T>(int StatusCode, T? Value) : Microsoft.AspNetCore.Http.IResult
-    {
-        public Task ExecuteAsync(HttpContext httpContext)
-        {
-            httpContext.Response.StatusCode = StatusCode;
-            return Value is null
-                ? Task.CompletedTask
-                : httpContext.Response.WriteAsJsonAsync(Value, Value.GetType());
-        }
-    }
 }

@@ -1,6 +1,7 @@
 ﻿using Forlife.Vendas.Api.Extensions;
 using Forlife.Vendas.Domain.Requests.Clientes;
 using Forlife.Vendas.Domain.Requests.LocaisVenda;
+using Forlife.Vendas.Domain.Responses.LocaisVenda;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,19 +16,19 @@ public class ClientesController : ControllerBase
     public ClientesController(IMediator mediator) => _mediator = mediator;
 
     [HttpPost]
-    public async Task<IResult> CadastrarCliente(CadastrarClienteRequest request)
+    public async Task<IActionResult> CadastrarCliente(CadastrarClienteRequest request)
         => await _mediator.SendCommand(request);
 
     [HttpGet("{id}")]
-    public async Task<IResult> ConsultarCliente(string id)
+    public async Task<IActionResult> ConsultarCliente(string id)
         => await _mediator.SendCommand(new ConsultarClienteRequest(id));
 
 
     [HttpGet("clientesPorLoja/{idLocal}")]
-    public async Task<IResult> ConsultarClientesPorLocal(string idLocal)
+    public async Task<IActionResult> ConsultarClientesPorLocal(string idLocal)
         => await _mediator.SendCommand(new ConsultarClientesPorLocalRequest(idLocal));
 
     [HttpGet]
-    public async Task<IResult> Clientes()
+    public async Task<IActionResult> Clientes()
         => await _mediator.SendCommand(new GetClientesRequest());
 }
