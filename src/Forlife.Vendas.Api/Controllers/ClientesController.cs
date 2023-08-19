@@ -1,7 +1,5 @@
 ﻿using Forlife.Vendas.Api.Extensions;
 using Forlife.Vendas.Domain.Requests.Clientes;
-using Forlife.Vendas.Domain.Requests.LocaisVenda;
-using Forlife.Vendas.Domain.Responses.LocaisVenda;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -29,6 +27,6 @@ public class ClientesController : ControllerBase
         => await _mediator.SendCommand(new ConsultarClientesPorLocalRequest(idLocal));
 
     [HttpGet]
-    public async Task<IActionResult> Clientes()
-        => await _mediator.SendCommand(new GetClientesRequest());
+    public async Task<IActionResult> Clientes(string? nome, string? telefone, string? idLocal)
+        => await _mediator.SendCommand(new GetClientesRequest(nome, telefone, idLocal));
 }

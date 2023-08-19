@@ -2,5 +2,5 @@
 
 namespace Forlife.Vendas.Domain.Responses.LocaisVenda;
 
-public record GetClientesResponse(IEnumerable<Cliente> Clientes);
+public record GetClientesResponse(int TotalClientes, int ClientesRetornados, IEnumerable<Cliente> Clientes);
 

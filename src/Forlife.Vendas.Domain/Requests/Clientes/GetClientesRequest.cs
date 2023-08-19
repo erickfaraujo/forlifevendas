@@ -2,7 +2,7 @@
 using MediatR;
 using OperationResult;
 
-namespace Forlife.Vendas.Domain.Requests.LocaisVenda;
+namespace Forlife.Vendas.Domain.Requests.Clientes;
 
-public record GetClientesRequest() : IRequest<Result<GetClientesResponse>>;
+public record GetClientesRequest(string Nome, string Telefone, string IdLocal) : IRequest<Result<GetClientesResponse>>;
 
