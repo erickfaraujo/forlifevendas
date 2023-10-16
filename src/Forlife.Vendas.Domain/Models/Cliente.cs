@@ -5,13 +5,13 @@ namespace Forlife.Vendas.Domain.Models;
 public class Cliente
 {
     [JsonPropertyName("pk")]
-    public string Pk => string.Concat(Nome.Replace(" ", "").ToLower(), '-', Telefone);
+    public string Pk { get; init; } = default!;
 
     [JsonPropertyName("sk")]
     public string Sk => "PERFIL";
 
     [JsonPropertyName("nome")]
-    public string Nome { get; init; } = default!;
+    public string Nome { get; set; } = default!;
 
     [JsonPropertyName("telefone")]
     public string Telefone { get; set; } = default!;

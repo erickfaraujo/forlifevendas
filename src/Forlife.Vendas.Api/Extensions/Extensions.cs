@@ -22,6 +22,7 @@ public static class Extensions
             CadastrarLocalException e => new ObjectResult(e.Mensagem) { StatusCode = 500 },
             LocalNaoLocalizadoException e => new BadRequestObjectResult(e.Mensagem),
             PedidoNaoLocalizadoException e => new BadRequestObjectResult(e.Mensagem),
+            AtualizarClienteException e => new ObjectResult(e.Mensagem) { StatusCode = 500 },
             _ => new ObjectResult(500)
         };
 }

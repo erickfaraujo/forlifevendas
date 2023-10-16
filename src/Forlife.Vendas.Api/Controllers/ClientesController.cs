@@ -29,4 +29,8 @@ public class ClientesController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> Clientes(string? nome, string? telefone, string? idLocal)
         => await _mediator.SendCommand(new GetClientesRequest(nome, telefone, idLocal));
+
+    [HttpPut]
+    public async Task<IActionResult> AlterarCliente(AtualizarClienteRequest request)
+        => await _mediator.SendCommand(request);
 }

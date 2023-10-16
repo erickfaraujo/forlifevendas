@@ -31,6 +31,7 @@ public class CadastrarClienteRequestHandler : IRequestHandler<CadastrarClienteRe
 
         var cliente = new Cliente()
         {
+            Pk = Guid.NewGuid().ToString(),
             Nome = request.Nome,
             Telefone = request.Telefone,
             Email = request.Email,
