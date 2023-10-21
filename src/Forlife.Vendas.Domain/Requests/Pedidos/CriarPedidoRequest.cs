@@ -4,4 +4,6 @@ using OperationResult;
 
 namespace Forlife.Vendas.Domain.Requests.Pedidos;
 
-public record CriarPedidoRequest(string Itens, decimal ValorTotal, decimal ValorPago, string IdCliente) : IRequest<Result<CriarPedidoResponse>>;
+public record CriarPedidoRequest(IEnumerable<Item>? Itens, decimal ValorTotal, decimal ValorPago, string IdCliente, string Observacoes) : IRequest<Result<CriarPedidoResponse>>;
+
+public record Item(int CodigoProduto, int Quantidade);

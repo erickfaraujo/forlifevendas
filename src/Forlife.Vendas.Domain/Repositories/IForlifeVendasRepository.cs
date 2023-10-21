@@ -8,6 +8,8 @@ public interface IForlifeVendasRepository
 
     Task<T?> GetAsync<T>(string pk, string sk) where T : class;
 
+    Task<Pedido?> GetPedidoByIdAsync(string sk);
+
     Task<IEnumerable<Cliente>?> GetClienteByIdLocalAsync(Guid Id);
 
     Task<IEnumerable<T>?> GetAllAsync<T>() where T : class;

@@ -28,7 +28,7 @@ public class CadastrarLocalRequestHandler : IRequestHandler<CadastrarLocalReques
             IdLocal = Guid.NewGuid(),
             Descricao = request.Descricao,
             Endereco = request.Endereco,
-            Referencia = request.Referencia
+            Referencia = request.Referencia!
         };
 
         var resultInsert = await _localVendaRepository.CreateAsync(localVenda);

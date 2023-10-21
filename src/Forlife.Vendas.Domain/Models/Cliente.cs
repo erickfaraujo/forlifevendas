@@ -20,7 +20,7 @@ public class Cliente
     public string Email { get; set; } = default!;
 
     [JsonPropertyName("dtnascimento")]
-    public string DtNascimento { get; init; } = default!;
+    public string DtNascimento { get; set; } = default!;
 
     [JsonPropertyName("idlocal")]
     public string IdLocal { get; set; } = default!;

@@ -36,8 +36,8 @@ public class ForlifeVendasRepository : IForlifeVendasRepository
             TableName = _tableName,
             Key = new Dictionary<string, AttributeValue>()
             {
-                { "pk", new AttributeValue() { S = pk } },
-                { "sk", new AttributeValue() { S = sk } }
+                { "sk", new AttributeValue() { S = sk } },
+                { "pk", new AttributeValue() { S = pk } }
             },
             ConsistentRead = true
         };
@@ -49,6 +49,31 @@ public class ForlifeVendasRepository : IForlifeVendasRepository
         var document = Document.FromAttributeMap(response.Item);
 
         return JsonSerializer.Deserialize<T>(document.ToJson());
+    }
+
+    public async Task<Pedido?> GetPedidoByIdAsync(string sk)
+    {
+        var request = new QueryRequest()
+        {
+            TableName = _tableName,
+            IndexName = _skPkIndex,
+            ScanIndexForward = true,
+            Select = "ALL_PROJECTED_ATTRIBUTES",
+            KeyConditionExpression = "sk = :v_sk",
+            ExpressionAttributeValues = new Dictionary<string, AttributeValue>()
+            {
+                { ":v_sk", new() { S = $"PEDIDO#{sk}" } }
+            },
+        };
+
+        var response = await _dynamoDB.QueryAsync(request);
+
+        if (response is null)
+            return default;
+
+        var document = Document.FromAttributeMap(response.Items.FirstOrDefault());
+
+        return JsonSerializer.Deserialize<Pedido>(document.ToJson());
     }
 
     public async Task<IEnumerable<Cliente>?> GetClienteByIdLocalAsync(Guid Id)
