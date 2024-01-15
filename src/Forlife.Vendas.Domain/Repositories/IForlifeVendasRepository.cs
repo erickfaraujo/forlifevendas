@@ -1,4 +1,5 @@
 ﻿using Forlife.Vendas.Domain.Models;
+using Forlife.Vendas.Domain.Requests.Pedidos;
 
 namespace Forlife.Vendas.Domain.Repositories;
 
@@ -7,6 +8,8 @@ public interface IForlifeVendasRepository
     Task<bool> CreateAsync<T>(T obj) where T : class;
 
     Task<T?> GetAsync<T>(string pk, string sk) where T : class;
+
+    Task<bool> DeleteAsync<T>(string pk, string sk) where T : class;
 
     Task<Pedido?> GetPedidoByIdAsync(string sk);
 
@@ -17,4 +20,6 @@ public interface IForlifeVendasRepository
     Task<List<Pedido>?> GetPedidosClienteAsync(string pk);
 
     Task<List<Pedido>?> GetPedidosPorDataAsync(string dataInicio, string dataFim);
+
+    Task<List<Pedido>?> GetPedidosAsync(ConsultarPedidosRequest parametros);
 }

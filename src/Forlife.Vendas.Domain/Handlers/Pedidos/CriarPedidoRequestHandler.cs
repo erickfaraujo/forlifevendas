@@ -26,6 +26,7 @@ public class CriarPedidoRequestHandler : IRequestHandler<CriarPedidoRequest, Res
         {
             Pk = cliente.Pk,
             IdPedido = Guid.NewGuid(),
+            IdLocal = cliente.IdLocal,
             DataPedido = DateTime.Now.ToString("yyyy-MM-dd"),
             Valor = request.ValorTotal,
             Itens = new List<Item>(), // não implementado, qndo o front estiver preparado, pegar valor do request

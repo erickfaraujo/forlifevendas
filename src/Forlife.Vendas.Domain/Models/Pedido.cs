@@ -14,6 +14,9 @@ public class Pedido
     [JsonPropertyName("idpedido")]
     public Guid IdPedido { get; init; } = default!;
 
+    [JsonPropertyName("idLocal")]
+    public string IdLocal { get; init; } = default!;
+
     [JsonPropertyName("datapedido")]
     public string DataPedido { get; init; } = default!;
 
@@ -32,8 +35,13 @@ public class Pedido
     [JsonPropertyName("observacoes")]
     public string Observacoes { get; set; } = default!;
 
-    [JsonPropertyName("status")]
+    [JsonPropertyName("statusPagamento")]
     public string Status { get; set; } = default!;
+
+    [JsonPropertyName("InformacoesAdicionais")]
+    public InfosAdicionais InfosAdicionais { get; set; } = default!;
 }
 
 public record Pagamento(DateTime Data, decimal Valor);
+
+public record InfosAdicionais(string NomeCliente, string NomeLocal);

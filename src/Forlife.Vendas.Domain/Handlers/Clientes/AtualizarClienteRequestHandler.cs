@@ -35,8 +35,9 @@ public class AtualizarClienteRequestHandler : IRequestHandler<AtualizarClienteRe
         cliente.Nome = request.Nome;
         cliente.Telefone = request.Telefone;
         cliente.Email = request.Email;
-        cliente.DtNascimento = request.DataNascimento.ToString();
+        cliente.DtNascimento = request.DataNascimento?.ToString("yyyy-MM-dd");
         cliente.IdLocal = request.IdLocalVenda.ToString();
+        cliente.Observacao = request.Observacao;
         
         var resultInsert = await _forlifeVendasRepository.CreateAsync(cliente);
 

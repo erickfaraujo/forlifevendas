@@ -20,6 +20,11 @@ public class GetLocaisRequestHandler : IRequestHandler<GetLocaisRequest, Result<
     {
         var locais = await _localVendaRepository.GetAllAsync();
 
+        if (locais is null) return new LocalNaoLocalizadoException();
+
+        if (request.Descricao is not null) locais = locais.Where(cliente => cliente.Descricao.Contains(request.Descricao, StringComparison.OrdinalIgnoreCase));
+        if (request.Endereco is not null) locais = locais.Where(cliente => cliente.Endereco.Replace("-", "").Replace(" ", "").Contains(request.Endereco));
+
         return locais is null || !locais.Any()
             ? new LocalNaoLocalizadoException()
             : new GetLocaisResponse(locais);

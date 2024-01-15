@@ -22,6 +22,6 @@ public class LocalVendaController : ControllerBase
         => await _mediator.SendCommand(new ConsultarLocalRequest(id));
 
     [HttpGet()]
-    public async Task<IActionResult> Locais()
-        => await _mediator.SendCommand(new GetLocaisRequest());
+    public async Task<IActionResult> Locais(string? descricao, string? endereco)
+        => await _mediator.SendCommand(new GetLocaisRequest(descricao, endereco));
 }

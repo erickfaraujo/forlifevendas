@@ -35,9 +35,11 @@ public class CadastrarClienteRequestHandler : IRequestHandler<CadastrarClienteRe
             Nome = request.Nome,
             Telefone = request.Telefone,
             Email = request.Email,
-            DtNascimento = request.DataNascimento.ToString("yyyy-MM-dd"),
-            IdLocal = localVenda.IdLocal.ToString()
+            IdLocal = localVenda.IdLocal.ToString(),
+            Observacao = request.Observacao
         };
+
+        cliente.DtNascimento = request.DataNascimento?.ToString("yyyy-MM-dd");
 
         var cliExistente = await _forlifeVendasRepository.GetAsync<Cliente>(cliente.Pk, cliente.Sk);
 

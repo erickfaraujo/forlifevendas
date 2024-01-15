@@ -25,6 +25,14 @@ public class PedidosController : ControllerBase
     public async Task<IActionResult> ConsultarPedidoCliente(string dataInicio, string dataFim)
         => await _mediator.SendCommand(new ConsultarPedidosPorDataRequest(dataInicio, dataFim));
 
+    [HttpGet()]
+    public async Task<IActionResult> ConsultarPedidos([FromQuery] ConsultarPedidosRequest request)
+        => await _mediator.SendCommand(request);
+
+    [HttpGet("{idPedido}")]
+    public async Task<IActionResult> ConsultarDetalhesPedido(string idPedido)
+        => await _mediator.SendCommand(new ConsultarDetalhesPedidoRequest(idPedido));
+
     [HttpPut()]
     public async Task<IActionResult> InserirPagamentoPedido(InserirPagamentoPedidoRequestRequest request)
         => await _mediator.SendCommand(request);

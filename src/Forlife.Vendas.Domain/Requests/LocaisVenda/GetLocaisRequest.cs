@@ -4,5 +4,5 @@ using OperationResult;
 
 namespace Forlife.Vendas.Domain.Requests.LocaisVenda;
 
-public record GetLocaisRequest() : IRequest<Result<GetLocaisResponse>>;
+public record GetLocaisRequest(string Descricao, string Endereco) : IRequest<Result<GetLocaisResponse>>;
 

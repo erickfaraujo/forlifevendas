@@ -3,6 +3,7 @@ using Amazon.DynamoDBv2.DocumentModel;
 using Amazon.DynamoDBv2.Model;
 using Forlife.Vendas.Domain.Models;
 using Forlife.Vendas.Domain.Repositories;
+using Forlife.Vendas.Domain.Requests.Pedidos;
 using System.Net;
 using System.Text.Json;
 
@@ -11,7 +12,8 @@ namespace Forlife.Vendas.Data.Repositories;
 public class ForlifeVendasRepository : IForlifeVendasRepository
 {
     private readonly IAmazonDynamoDB _dynamoDB;
-    private readonly string _tableName = "forlifevendasdb";
+    private readonly string _vendasTableName = "forlifevendasdb";
+    private readonly string _locaisTableName = "LocalVenda";
     private readonly string _idLocalIndex = "idlocal-index";
     private readonly string _skPkIndex = "sk-pk-index";
 
@@ -22,7 +24,7 @@ public class ForlifeVendasRepository : IForlifeVendasRepository
         var objetoJson = JsonSerializer.Serialize(obj);
         var document = Document.FromJson(objetoJson);
         var attributes = document.ToAttributeMap();
-        var createRequest = new PutItemRequest() { TableName = _tableName, Item = attributes };
+        var createRequest = new PutItemRequest() { TableName = _vendasTableName, Item = attributes };
 
         var response = await _dynamoDB.PutItemAsync(createRequest);
 
@@ -33,7 +35,7 @@ public class ForlifeVendasRepository : IForlifeVendasRepository
     {
         var getRequest = new GetItemRequest()
         {
-            TableName = _tableName,
+            TableName = _vendasTableName,
             Key = new Dictionary<string, AttributeValue>()
             {
                 { "sk", new AttributeValue() { S = sk } },
@@ -43,6 +45,7 @@ public class ForlifeVendasRepository : IForlifeVendasRepository
         };
 
         var response = await _dynamoDB.GetItemAsync(getRequest);
+        
         if (response.Item.Count is 0)
             return null;
 
@@ -51,11 +54,27 @@ public class ForlifeVendasRepository : IForlifeVendasRepository
         return JsonSerializer.Deserialize<T>(document.ToJson());
     }
 
+    public async Task<bool> DeleteAsync<T>(string pk, string sk) where T : class
+    {
+        var tableName = sk is "PERFIL" ? _vendasTableName : _locaisTableName;
+
+        var attr = new Dictionary<string, AttributeValue>()
+        {
+            { "pk", new AttributeValue() { S = pk } },
+            { "sk", new AttributeValue() { S = sk } }
+
+        };
+
+        var response = await _dynamoDB.DeleteItemAsync(tableName, attr);
+
+        return response.HttpStatusCode is HttpStatusCode.OK;
+    }
+
     public async Task<Pedido?> GetPedidoByIdAsync(string sk)
     {
         var request = new QueryRequest()
         {
-            TableName = _tableName,
+            TableName = _vendasTableName,
             IndexName = _skPkIndex,
             ScanIndexForward = true,
             Select = "ALL_PROJECTED_ATTRIBUTES",
@@ -80,7 +99,7 @@ public class ForlifeVendasRepository : IForlifeVendasRepository
     {
         var request = new QueryRequest()
         {
-            TableName = _tableName,
+            TableName = _vendasTableName,
             IndexName = _idLocalIndex,
             ScanIndexForward = true,
             Select = "ALL_PROJECTED_ATTRIBUTES",
@@ -115,7 +134,7 @@ public class ForlifeVendasRepository : IForlifeVendasRepository
 
         var request = new QueryRequest()
         {
-            TableName = _tableName,
+            TableName = _vendasTableName,
             IndexName = _skPkIndex,
             ScanIndexForward = true,
             Select = "ALL_PROJECTED_ATTRIBUTES",
@@ -143,7 +162,7 @@ public class ForlifeVendasRepository : IForlifeVendasRepository
     {
         var request = new QueryRequest()
         {
-            TableName = _tableName,
+            TableName = _vendasTableName,
             ScanIndexForward = true,
             KeyConditionExpression = "pk = :v_pk AND begins_with(sk, :v_sk)",
             ExpressionAttributeValues = new Dictionary<string, AttributeValue>()
@@ -170,7 +189,7 @@ public class ForlifeVendasRepository : IForlifeVendasRepository
     {
         var scanRequest = new ScanRequest()
         {
-            TableName = _tableName,
+            TableName = _vendasTableName,
             FilterExpression = "datapedido >= :v_dataInicio AND datapedido <= :v_dataFim",
             ExpressionAttributeValues = new Dictionary<string, AttributeValue>()
             {
@@ -178,6 +197,65 @@ public class ForlifeVendasRepository : IForlifeVendasRepository
                 { ":v_dataFim", new() { S = dataFim } }
             }
         };
+
+        var response = await _dynamoDB.ScanAsync(scanRequest);
+        if (response.ScannedCount is 0)
+            return null;
+
+        var pedidos = new List<Pedido>();
+
+        foreach (var item in response.Items)
+        {
+            var document = Document.FromAttributeMap(item);
+            pedidos.Add(JsonSerializer.Deserialize<Pedido>(document.ToJson())!);
+        }
+
+        return pedidos;
+    }
+
+    public async Task<List<Pedido>?> GetPedidosAsync(ConsultarPedidosRequest parametros)
+    {
+        var filterExp = "begins_with(sk, :v_sk)";
+        var expAtributeValues = new Dictionary<string, AttributeValue>()
+        {
+            { ":v_sk", new() { S = "PEDIDO"} }
+        };
+
+        if (parametros.DataInicio is not null)
+        {
+            filterExp += " AND datapedido >= :v_dataInicio";
+            expAtributeValues.Add(":v_dataInicio", new() { S = parametros.DataInicio });
+        }
+
+        if (parametros.DataFim is not null)
+        {
+            filterExp += " AND datapedido <= :v_dataFim";
+            expAtributeValues.Add(":v_dataFim", new() { S = parametros.DataFim });
+        }
+
+        if (parametros.StatusPagamento is not null)
+        {
+            filterExp += " AND statusPagamento = :v_pago";
+            expAtributeValues.Add(":v_pago", new() { S = parametros.StatusPagamento });
+        }
+
+        if(parametros.IdLocal is not null)
+        {
+            filterExp += " AND idLocal = :v_local";
+            expAtributeValues.Add(":v_local", new() { S = parametros.IdLocal });
+        }
+
+        var scanRequest = new ScanRequest()
+        {
+            TableName = _vendasTableName
+        };
+
+        if (filterExp.Length > 1)
+        {
+            scanRequest.FilterExpression = filterExp;
+            scanRequest.ExpressionAttributeValues = expAtributeValues;
+        }
+            
 
         var response = await _dynamoDB.ScanAsync(scanRequest);
         if (response.ScannedCount is 0)
