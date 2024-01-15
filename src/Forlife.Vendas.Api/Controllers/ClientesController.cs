@@ -34,7 +34,7 @@ public class ClientesController : ControllerBase
     public async Task<IActionResult> AlterarCliente(AtualizarClienteRequest request)
         => await _mediator.SendCommand(request);
 
-    [HttpDelete]
-    public async Task<IActionResult> ExcluirCliente(ExcluirClienteRequest request)
-        => await _mediator.SendCommand(request);
+    [HttpDelete("{idCliente}")]
+    public async Task<IActionResult> ExcluirCliente(string idCliente)
+        => await _mediator.SendCommand(new ExcluirClienteRequest(idCliente));
 }
