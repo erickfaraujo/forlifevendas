@@ -10,7 +10,7 @@ using OperationResult;
 
 namespace Forlife.Vendas.Domain.Handlers.Pedidos;
 
-public class InserirPagamentoPedidoRequestHandler : IRequestHandler<InserirPagamentoPedidoRequestRequest, Result<InserirPagamentoPedidoResponse>>
+public class InserirPagamentoPedidoRequestHandler : IRequestHandler<InserirPagamentoPedidoRequest, Result<InserirPagamentoPedidoResponse>>
 {
     private readonly IForlifeVendasRepository _forlifeVendasRepository;
     private readonly ILogger<InserirPagamentoPedidoRequestHandler> _logger;
@@ -20,7 +20,7 @@ public class InserirPagamentoPedidoRequestHandler : IRequestHandler<InserirPagam
         _forlifeVendasRepository = forlifeVendasRepository;
         _logger = logger;
     }
-    public async Task<Result<InserirPagamentoPedidoResponse>> Handle(InserirPagamentoPedidoRequestRequest request, CancellationToken cancellationToken)
+    public async Task<Result<InserirPagamentoPedidoResponse>> Handle(InserirPagamentoPedidoRequest request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Inserindo pagamento de pedido");
 

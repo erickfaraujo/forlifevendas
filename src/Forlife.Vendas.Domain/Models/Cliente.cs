@@ -28,5 +28,6 @@ public class Cliente
     [JsonPropertyName("idlocal")]
     public string IdLocal { get; set; } = default!;
 
+    [JsonPropertyName("nomeLocal")]
     public string NomeLocal { get; set; } = default!;
 }

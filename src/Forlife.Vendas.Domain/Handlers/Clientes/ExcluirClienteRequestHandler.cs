@@ -25,11 +25,16 @@ public class ExcluirClienteRequestHandler : IRequestHandler<ExcluirClienteReques
 
         _ = await _forlifeVendasRepository.GetAsync<Cliente>(request.Id, "PERFIL")
                       ?? throw new ClienteNaoLocalizadoException();
-        
+
+        var pedidos = await _forlifeVendasRepository.GetPedidosClienteAsync(request.Id);
+
+        if (pedidos is not null && pedidos.Count > 0)
+            return new ExcluirClienteComPedidoException();
+
         var result = await _forlifeVendasRepository.DeleteAsync<Cliente>(request.Id, "PERFIL");
 
         return result
             ? Result.Success(true)
-            : throw new ExcluirClienteException();
+            : new ExcluirClienteException();
     }
 }

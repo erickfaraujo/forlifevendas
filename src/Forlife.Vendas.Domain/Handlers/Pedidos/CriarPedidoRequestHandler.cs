@@ -27,14 +27,19 @@ public class CriarPedidoRequestHandler : IRequestHandler<CriarPedidoRequest, Res
             Pk = cliente.Pk,
             IdPedido = Guid.NewGuid(),
             IdLocal = cliente.IdLocal,
-            DataPedido = DateTime.Now.ToString("yyyy-MM-dd"),
+            DataPedido = request.DataPedido.ToString("yyyy-MM-dd"),
             Valor = request.ValorTotal,
-            Itens = new List<Item>(), // não implementado, qndo o front estiver preparado, pegar valor do request
-            Pagamentos = new List<Pagamento>() { new Pagamento(DateTime.Now, request.ValorPago) },
+            Itens = [], // não implementado, qndo o front estiver preparado, pegar valor do request
+            Pagamentos = [],
             TotalPagamento = request.ValorPago,
             Observacoes = request.Observacoes,
-            Status = request.ValorPago < request.ValorTotal ? Enum.GetName(StatusPagamento.PENDENTE)! : Enum.GetName(StatusPagamento.PAGO)!
+            CodigosProdutos = request.CodProdutos,
+            Status = request.ValorPago < request.ValorTotal ? Enum.GetName(StatusPagamento.PENDENTE)! : Enum.GetName(StatusPagamento.PAGO)!,
+            InfosAdicionais = new (cliente.Nome, cliente.NomeLocal)
         };
+
+        if (request.ValorPago > 0)
+            pedido.Pagamentos.Add(new Pagamento(DateTime.Now, request.ValorPago));
 
         var result = await _forlifeVendasRepository.CreateAsync(pedido);
 

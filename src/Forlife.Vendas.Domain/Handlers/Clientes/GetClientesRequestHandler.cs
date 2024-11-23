@@ -45,6 +45,6 @@ public class GetClientesRequestHandler : IRequestHandler<GetClientesRequest, Res
 
         return clientesResponse is null || !clientesResponse.Any()
             ? new ClienteNaoLocalizadoException()
-            : new GetClientesResponse(totalClientes, clientesRetornados, clientesResponse);
+            : new GetClientesResponse(totalClientes, clientesRetornados, clientesResponse.OrderBy(x => x.Nome));
     }
 }

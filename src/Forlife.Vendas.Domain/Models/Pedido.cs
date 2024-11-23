@@ -21,7 +21,7 @@ public class Pedido
     public string DataPedido { get; init; } = default!;
 
     [JsonPropertyName("valor")]
-    public decimal Valor { get; init; }
+    public decimal Valor { get; set; }
 
     [JsonPropertyName("itens")]
     public IEnumerable<Item> Itens { get; set; } = default!;
@@ -40,6 +40,9 @@ public class Pedido
 
     [JsonPropertyName("InformacoesAdicionais")]
     public InfosAdicionais InfosAdicionais { get; set; } = default!;
+
+    [JsonPropertyName("CodProdutos")]
+    public string CodigosProdutos { get; set; } = default!;
 }
 
 public record Pagamento(DateTime Data, decimal Valor);

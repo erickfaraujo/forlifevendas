@@ -22,4 +22,6 @@ public interface IForlifeVendasRepository
     Task<List<Pedido>?> GetPedidosPorDataAsync(string dataInicio, string dataFim);
 
     Task<List<Pedido>?> GetPedidosAsync(ConsultarPedidosRequest parametros);
+
+    Task<List<Cliente>> GetAniversariantesAsync(DateTime dataInicio, DateTime dataFim);
 }

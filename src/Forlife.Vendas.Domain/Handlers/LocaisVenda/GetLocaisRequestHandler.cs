@@ -12,9 +12,7 @@ public class GetLocaisRequestHandler : IRequestHandler<GetLocaisRequest, Result<
     private readonly ILocalVendaRepository _localVendaRepository;
 
     public GetLocaisRequestHandler(ILocalVendaRepository localVendaRepository)
-    {
-        _localVendaRepository = localVendaRepository;
-    }
+        => _localVendaRepository = localVendaRepository;
 
     public async Task<Result<GetLocaisResponse>> Handle(GetLocaisRequest request, CancellationToken cancellationToken)
     {
@@ -27,6 +25,6 @@ public class GetLocaisRequestHandler : IRequestHandler<GetLocaisRequest, Result<
 
         return locais is null || !locais.Any()
             ? new LocalNaoLocalizadoException()
-            : new GetLocaisResponse(locais);
+            : new GetLocaisResponse(locais.OrderBy(x => x.Descricao));
     }
 }

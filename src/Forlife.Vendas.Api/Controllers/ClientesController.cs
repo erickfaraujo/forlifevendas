@@ -37,4 +37,9 @@ public class ClientesController : ControllerBase
     [HttpDelete("{idCliente}")]
     public async Task<IActionResult> ExcluirCliente(string idCliente)
         => await _mediator.SendCommand(new ExcluirClienteRequest(idCliente));
+
+    [HttpGet("aniversariantes")]
+    public async Task<IActionResult> GetAniversariantes([FromQuery] DateTime dataInicio, DateTime dataFim)
+        => await _mediator.SendCommand(new GetAniversariantesRequest(dataInicio, dataFim));
+
 }

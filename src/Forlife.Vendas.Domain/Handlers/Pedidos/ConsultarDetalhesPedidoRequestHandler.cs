@@ -19,6 +19,12 @@ public class ConsultarDetalhesPedidoRequestHandler : IRequestHandler<ConsultarDe
     {
         var pedido = await _forlifeVendasRepository.GetPedidoByIdAsync(request.IdPedido);
 
+        if (pedido is null) return new PedidoNaoLocalizadoException();
+
+        var cliente = await _forlifeVendasRepository.GetAsync<Cliente>(pedido.Pk, "PERFIL");
+
+        pedido.InfosAdicionais = new(cliente!.Nome, string.Empty);
+
         return pedido!.Pk is null
             ? new PedidoNaoLocalizadoException()
             : new ConsultarDetalhesPedidoResponse(pedido);

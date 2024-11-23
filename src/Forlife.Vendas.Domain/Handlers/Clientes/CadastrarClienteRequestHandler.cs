@@ -29,17 +29,17 @@ public class CadastrarClienteRequestHandler : IRequestHandler<CadastrarClienteRe
         if (localVenda is null || string.IsNullOrEmpty(localVenda.Descricao))
             return new LocalNaoLocalizadoException();
 
-        var cliente = new Cliente()
+        var cliente = new Cliente
         {
             Pk = Guid.NewGuid().ToString(),
             Nome = request.Nome,
             Telefone = request.Telefone,
             Email = request.Email,
             IdLocal = localVenda.IdLocal.ToString(),
-            Observacao = request.Observacao
+            Observacao = request.Observacao,
+            DtNascimento = request.DataNascimento?.ToString("yyyy-MM-dd"),
+            NomeLocal = localVenda.Descricao
         };
-
-        cliente.DtNascimento = request.DataNascimento?.ToString("yyyy-MM-dd");
 
         var cliExistente = await _forlifeVendasRepository.GetAsync<Cliente>(cliente.Pk, cliente.Sk);
 

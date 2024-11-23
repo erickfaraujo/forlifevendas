@@ -221,17 +221,20 @@ public class ForlifeVendasRepository : IForlifeVendasRepository
             { ":v_sk", new() { S = "PEDIDO"} }
         };
 
-        if (parametros.DataInicio is not null)
+        if(parametros.DataInicio is not null || parametros.DataFim is not null)
         {
-            filterExp += " AND datapedido >= :v_dataInicio";
-            expAtributeValues.Add(":v_dataInicio", new() { S = parametros.DataInicio });
-        }
+            var dataInicio = new DateTime(2020, 1, 1);
+            var dataFim = new DateTime(2040, 1, 1);
 
-        if (parametros.DataFim is not null)
-        {
-            filterExp += " AND datapedido <= :v_dataFim";
-            expAtributeValues.Add(":v_dataFim", new() { S = parametros.DataFim });
+            if (parametros.DataInicio is not null) dataInicio = Convert.ToDateTime(parametros.DataInicio);
+
+            if (parametros.DataFim is not null) dataFim = Convert.ToDateTime(parametros.DataFim);
+
+            filterExp += " AND datapedido BETWEEN :v_dataInicio AND :v_dataFim";
+            expAtributeValues.Add(":v_dataInicio", new() { S = dataInicio.ToString("yyyy-MM-dd") });
+            expAtributeValues.Add(":v_dataFim", new() { S = dataFim.ToString("yyyy-MM-dd") });
         }
+        
 
         if (parametros.StatusPagamento is not null)
         {
@@ -270,5 +273,33 @@ public class ForlifeVendasRepository : IForlifeVendasRepository
         }
 
         return pedidos;
+    }
+
+    public async Task<List<Cliente>?> GetAniversariantesAsync(DateTime dataInicio, DateTime dataFim)
+    {
+        var scanRequest = new ScanRequest()
+        {
+            TableName = _vendasTableName,
+            FilterExpression = "dtnascimento >= :v_dataInicio AND dtnascimento <= :v_dataFim",
+            ExpressionAttributeValues = new Dictionary<string, AttributeValue>()
+            {
+                { ":v_dataInicio", new() { S = dataInicio.ToString() } },
+                { ":v_dataFim", new() { S = dataFim.ToString() } }
+            }
+        };
+
+        var response = await _dynamoDB.ScanAsync(scanRequest);
+        if (response.ScannedCount is 0)
+            return null;
+
+        var clientes = new List<Cliente>();
+
+        foreach (var item in response.Items)
+        {
+            var document = Document.FromAttributeMap(item);
+            clientes.Add(JsonSerializer.Deserialize<Cliente>(document.ToJson())!);
+        }      
+
+        return clientes;
     }
 }

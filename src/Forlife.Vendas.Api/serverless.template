@@ -9,11 +9,11 @@
       "Type": "AWS::Serverless::Function",
       "Properties": {
         "Handler": "Forlife.Vendas.Api",
-        "Runtime": "dotnet6",
+        "Runtime": "dotnet8",
         "CodeUri": "",
         "MemorySize": 256,
         "Timeout": 30,
-        "Role": null,
+        "Role": "null",
         "Policies": [
           "AWSLambda_FullAccess"
         ],

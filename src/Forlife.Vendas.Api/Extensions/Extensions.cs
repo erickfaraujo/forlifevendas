@@ -18,12 +18,13 @@ public static class Extensions
         => error switch
         {
             CadastrarClienteException e => new ObjectResult(e.Mensagem) { StatusCode = 500 },
-            ClienteNaoLocalizadoException e => new BadRequestObjectResult(e.Mensagem),
+            ClienteNaoLocalizadoException => new NotFoundResult(),
             CadastrarLocalException e => new ObjectResult(e.Mensagem) { StatusCode = 500 },
-            LocalNaoLocalizadoException e => new BadRequestObjectResult(e.Mensagem),
+            LocalNaoLocalizadoException => new NotFoundResult(),
             PedidoNaoLocalizadoException e => new NotFoundObjectResult(e.Mensagem),
             AtualizarClienteException e => new ObjectResult(e.Mensagem) { StatusCode = 500 },
             ExcluirClienteException e => new ObjectResult(e.Mensagem) { StatusCode = 500 },
+            ExcluirClienteComPedidoException e => new BadRequestObjectResult(e.Mensagem),
             _ => new ObjectResult(500)
         };
 }

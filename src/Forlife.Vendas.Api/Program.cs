@@ -2,8 +2,6 @@ using Amazon;
 using Amazon.DynamoDBv2;
 using Forlife.Vendas.Data.Repositories;
 using Forlife.Vendas.Domain.Handlers.Clientes;
-using Forlife.Vendas.Domain.Handlers.LocaisVenda;
-using Forlife.Vendas.Domain.Handlers.Pedidos;
 using Forlife.Vendas.Domain.Repositories;
 using Microsoft.OpenApi.Models;
 
@@ -21,8 +19,12 @@ builder.Services.AddSwaggerGen(c =>
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "ForlifeVendas", Version = "v1" });
 });
 
+var clientConfig = new AmazonDynamoDBConfig();
+clientConfig.RegionEndpoint = RegionEndpoint.USEast1;
+//[clientConfig.ServiceURL = "http://localhost:8000";
+
 builder.Services.AddMediatR(x => x.RegisterServicesFromAssembly(typeof(CadastrarClienteRequestHandler).Assembly));
-builder.Services.AddSingleton<IAmazonDynamoDB>(_ => new AmazonDynamoDBClient(RegionEndpoint.USEast1));
+builder.Services.AddSingleton<IAmazonDynamoDB>(_ => new AmazonDynamoDBClient(clientConfig));
 builder.Services.AddSingleton<IForlifeVendasRepository>(provider => new ForlifeVendasRepository(provider.GetRequiredService<IAmazonDynamoDB>()));
 builder.Services.AddSingleton<ILocalVendaRepository>(provider => new LocalVendaRepository(provider.GetRequiredService<IAmazonDynamoDB>()));
 
